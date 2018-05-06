@@ -2,6 +2,7 @@
   "name": "github-client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://artrnh.github.io/github-client/",
   "dependencies": {
     "antd": "^3.4.4",
     "autoprefixer": "7.1.6",
