@@ -103,10 +103,7 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app",
-    "rules": {
-      "jsx-a11y/href-no-hash": "off"
-    }
+    "extends": "react-app"
   },
   "devDependencies": {
     "babel-plugin-import": "^1.7.0",
