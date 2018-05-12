@@ -1,29 +1,51 @@
-import React, { Fragment } from 'react';
-import { Input } from 'antd';
-import styled from 'styled-components';
+import React from 'react';
+import { Input, Form } from 'antd';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import { updateForm } from '../../../store/actions/search';
 
 const { Search } = Input;
-const SearchInput = props => (
-  <Fragment>
-    <Label>Search by repository name</Label>
-    <Search
-      placeholder="Search..."
-      size="large"
-      enterButton
-      value={props.value}
-      onChange={e => props.onChange(e.target.value)}
-    />
-  </Fragment>
-);
+const FormItem = Form.Item;
+const SearchInput = (props) => {
+  const { getFieldDecorator } = props.form;
 
-SearchInput.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  return (
+    <Form>
+      <FormItem label="Search by repository">
+        {getFieldDecorator('search')(<Search
+          placeholder="Search..."
+          size="large"
+        />)}
+      </FormItem>
+    </Form>
+  );
 };
 
-const Label = styled.p`
-  margin-bottom: 5px;
-`;
+SearchInput.propTypes = {
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
-export default SearchInput;
+const mapStateToProps = state => ({
+  search: state.search.input,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onChange: changedFields => dispatch(updateForm(changedFields.search)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create({
+  onFieldsChange(props, changedFields) {
+    props.onChange(changedFields);
+  },
+  mapPropsToFields(props) {
+    return {
+      search: Form.createFormField({
+        ...props.search,
+        value: props.search.value,
+      }),
+    };
+  },
+})(SearchInput));

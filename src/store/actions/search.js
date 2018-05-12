@@ -1,8 +1,8 @@
-import { CHANGE_INPUT_VALUE } from '../actions/actionsTypes';
+import * as actionsTypes from '../actions/actionsTypes';
 
-export const changeValue = value => (
+export const updateForm = input => (
   {
-    type: CHANGE_INPUT_VALUE,
-    payload: { value },
+    type: actionsTypes.UPDATE_SEARCH_FORM,
+    payload: { input },
   }
 );

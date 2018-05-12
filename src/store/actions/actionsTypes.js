@@ -1,2 +1,2 @@
 // Search
-export const CHANGE_INPUT_VALUE = 'CHANGE_INPUT_VALUE';
+export const UPDATE_SEARCH_FORM = 'UPDATE_SEARCH_FORM';

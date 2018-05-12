@@ -1,17 +1,19 @@
-import { CHANGE_INPUT_VALUE } from '../actions/actionsTypes';
+import * as actionsTypes from '../actions/actionsTypes';
 
 const initialState = {
-  value: '',
+  input: {
+    value: '',
+  },
 };
 
 const reducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case CHANGE_INPUT_VALUE:
+    case actionsTypes.UPDATE_SEARCH_FORM:
       return {
         ...state,
-        value: payload.value,
+        input: { ...payload.input },
       };
 
     default:

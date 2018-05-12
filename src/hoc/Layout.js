@@ -11,13 +11,13 @@ const Layout = (props) => {
     props.history.push(`/${key}`);
   };
 
-  const activeTab = [props.location.pathname.slice(1)];
+  const activeTab = props.location.pathname.slice(1);
 
   return (
     <Container>
       <MenuBar
         mode="horizontal"
-        defaultSelectedKeys={activeTab}
+        activeKey={activeTab}
         onSelect={onItemSelect}
       >
         <Menu.Item key="profile">
