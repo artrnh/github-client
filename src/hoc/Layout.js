@@ -17,14 +17,17 @@ const Layout = (props) => {
     <Container>
       <MenuBar
         mode="horizontal"
-        activeKey={activeTab}
+        openKeys={[activeTab]}
+        selectedKeys={[activeTab]}
         onSelect={onItemSelect}
       >
         <Menu.Item key="profile">
-          <Icon type="user" />Profile
+          <Icon type="user" />
+          Profile
         </Menu.Item>
         <Menu.Item key="discover">
-          <Icon type="compass" />Discover
+          <Icon type="compass" />
+          Discover
         </Menu.Item>
       </MenuBar>
       {props.children}

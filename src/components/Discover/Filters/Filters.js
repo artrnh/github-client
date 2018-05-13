@@ -1,58 +1,62 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Card, Form, Input, Radio, Select, DatePicker, Checkbox, InputNumber } from 'antd';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+import { updateForm } from '../../../store/actions/filters';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const RadioGroup = Radio.Group;
-const Filters = () => (
-  <FilterCard>
-    <FilterForm layout="horizontal">
-      <FormItem label="Language">
-        <Select
-          name="language"
-          defaultValue="JavaScript"
-        >
-          <Option value="JavaScript">JavaScript</Option>
-        </Select>
-      </FormItem>
-      <FormItem label="Owner">
-        <Input
-          name="owner"
-          placeholder="Username or organization"
-        />
-      </FormItem>
-      <FormItem label="Stars">
-        <InputNumber
-          name="stars"
-          min={0}
-          defaultValue={0}
-        />
-      </FormItem>
-      <FormItem label="Forks">
-        <InputNumber
-          name="forks"
-          min={0}
-          defaultValue={0}
-        />
-      </FormItem>
-      <FormItem label="Updated after">
-        <DatePicker />
-      </FormItem>
-      <RadioButtonsContainer label="Type">
-        <RadioButtons defaultValue="All">
-          <Radio value="All">All</Radio>
-          <Radio value="Forks">Forks</Radio>
-          <Radio value="Sources">Sources</Radio>
-        </RadioButtons>
-      </RadioButtonsContainer>
-      <Others label="Others">
-        <Checkbox>Has open issues</Checkbox>
-        <Checkbox>Has topics</Checkbox>
-      </Others>
-    </FilterForm>
-  </FilterCard>
-);
+const Filters = (props) => {
+  const { getFieldDecorator } = props.form;
+  const options = (<Option value="JavaScript">JavaScript</Option>);
+  const radioBtns = (
+    <Fragment>
+      <Radio value="All">All</Radio>
+      <Radio value="Forks">Forks</Radio>
+      <Radio value="Sources">Sources</Radio>
+    </Fragment>
+  );
+
+  return (
+    <FilterCard>
+      <FilterForm layout="horizontal">
+        <FormItem label="Language">
+          {getFieldDecorator('language')(<Select>{options}</Select>)}
+        </FormItem>
+        <FormItem label="Owner">
+          {getFieldDecorator('owner')(<Input placeholder="Username or organization" />)}
+        </FormItem>
+        <FormItem label="Stars">
+          {getFieldDecorator('stars')(<InputNumber min={0} />)}
+        </FormItem>
+        <FormItem label="Forks">
+          {getFieldDecorator('forks')(<InputNumber min={0} />)}
+        </FormItem>
+        <FormItem label="Updated after">
+          {getFieldDecorator('date')(<DatePicker />)}
+        </FormItem>
+        <RadioButtonsContainer label="Type">
+          {getFieldDecorator('type')(<RadioButtons>{radioBtns}</RadioButtons>)}
+        </RadioButtonsContainer>
+        <Others label="Others">
+          {getFieldDecorator('hasOpenedIssues')(<Checkbox>Has opened issues</Checkbox>)}
+        </Others>
+        <FormItem>
+          {getFieldDecorator('hasTopics')(<Checkbox>Has topics</Checkbox>)}
+        </FormItem>
+      </FilterForm>
+    </FilterCard>
+  );
+};
+
+Filters.propTypes = {
+  form: PropTypes.shape({
+    getFieldDecorator: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 const FilterForm = styled(Form)`
   width: 200px;
@@ -89,10 +93,54 @@ const Others = styled(FormItem)`
   .ant-form-item-control {
     line-height: 30px;
   }
-
-  .ant-checkbox-wrapper + .ant-checkbox-wrapper {
-    margin-left: 0;
-  }
 `;
 
-export default Filters;
+const mapStateToProps = state => ({
+  fields: state.filters.fields,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onChange: fields => dispatch(updateForm(fields)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create({
+  onFieldsChange(props, changedFields) {
+    props.onChange(changedFields);
+  },
+  mapPropsToFields(props) {
+    return {
+      language: Form.createFormField({
+        ...props.fields.language,
+        value: props.fields.language.value,
+      }),
+      owner: Form.createFormField({
+        ...props.fields.owner,
+        value: props.fields.owner.value,
+      }),
+      stars: Form.createFormField({
+        ...props.fields.stars,
+        value: props.fields.stars.value,
+      }),
+      forks: Form.createFormField({
+        ...props.fields.forks,
+        value: props.fields.forks.value,
+      }),
+      date: Form.createFormField({
+        ...props.fields.date,
+        value: props.fields.date.value,
+      }),
+      type: Form.createFormField({
+        ...props.fields.type,
+        value: props.fields.type.value,
+      }),
+      hasOpenedIssues: Form.createFormField({
+        ...props.fields.hasOpenedIssues,
+        value: props.fields.hasOpenedIssues.value,
+      }),
+      hasTopics: Form.createFormField({
+        ...props.fields.hasTopics,
+        value: props.fields.hasTopics.value,
+      }),
+    };
+  },
+})(Filters));
