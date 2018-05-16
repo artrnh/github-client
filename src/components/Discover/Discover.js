@@ -3,11 +3,11 @@ import React from 'react';
 import SearchInput from './SearchInput/SearchInput';
 import Filters from './Filters/Filters';
 
-const Search = () => (
+const Discover = () => (
   <div>
     <SearchInput />
     <Filters />
   </div>
 );
 
-export default Search;
+export default Discover;

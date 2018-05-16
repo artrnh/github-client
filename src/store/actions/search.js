@@ -6,3 +6,10 @@ export const updateForm = input => (
     payload: { input },
   }
 );
+
+export const fetchRepos = url => (
+  {
+    type: actionsTypes.FETCH_REPOS_INIT,
+    payload: { url },
+  }
+);

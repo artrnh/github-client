@@ -18,7 +18,7 @@ const initialState = {
       value: null,
     },
     type: {
-      value: 'All',
+      value: 'true',
     },
     hasOpenedIssues: {
       value: false,

@@ -14,9 +14,8 @@ const Filters = (props) => {
   const options = (<Option value="JavaScript">JavaScript</Option>);
   const radioBtns = (
     <Fragment>
-      <Radio value="All">All</Radio>
-      <Radio value="Forks">Forks</Radio>
-      <Radio value="Sources">Sources</Radio>
+      <Radio value="true">All</Radio>
+      <Radio value="only">Forks</Radio>
     </Fragment>
   );
 
