@@ -10,11 +10,13 @@ import App from './App';
 
 import search from './store/reducers/search';
 import filters from './store/reducers/filters';
-import { watchSearch } from './store/sagas';
+import repositories from './store/reducers/repositories';
+import watchSearch from './store/sagas';
 
 const reducer = combineReducers({
   search,
   filters,
+  repositories,
 });
 
 const sagaMiddleware = createSagaMiddleware();

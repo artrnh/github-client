@@ -13,7 +13,7 @@ const reducer = (state = initialState, action) => {
     case actionsTypes.UPDATE_SEARCH_FORM:
       return {
         ...state,
-        input: { ...payload.input },
+        input: payload.input,
       };
 
     default:

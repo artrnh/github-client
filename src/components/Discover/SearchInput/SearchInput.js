@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { updateForm, fetchRepos } from '../../../store/actions/search';
-import buildUrl from '../../../utils/urlHelpers';
 
 const { Search } = Input;
 const FormItem = Form.Item;
@@ -51,19 +50,24 @@ class SearchInput extends Component {
 
   fetchRepos = () => {
     const { search, filters } = this.props;
-    const url = buildUrl(search.value, filters);
-    this.props.fetchRepos(url);
+    this.props.fetchRepos(search.value, filters);
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.fetchRepos();
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <Form>
+      <Form onSubmit={this.handleSubmit}>
         <FormItem label="Search by repository">
           {getFieldDecorator('search')(<Search
             placeholder="Search..."
             size="large"
+            enterButton
           />)}
         </FormItem>
       </Form>

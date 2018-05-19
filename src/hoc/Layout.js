@@ -49,7 +49,7 @@ const Container = styled.div`
   width: 1200px;
   margin: 0 auto;
 
-  ${media.desktop`width: auto;`}
+  ${media.xl`width: auto;`}
 `;
 
 const MenuBar = styled(Menu)`

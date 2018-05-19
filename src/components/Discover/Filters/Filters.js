@@ -3,15 +3,19 @@ import { Card, Form, Input, Radio, Select, DatePicker, Checkbox, InputNumber } f
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import { updateForm } from '../../../store/actions/filters';
+import { fetchRepos } from '../../../store/actions/search';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const RadioGroup = Radio.Group;
 const Filters = (props) => {
   const { getFieldDecorator } = props.form;
-  const options = (<Option value="JavaScript">JavaScript</Option>);
+  const options = (
+    <Option value="JavaScript">JavaScript</Option>
+  );
   const radioBtns = (
     <Fragment>
       <Radio value="true">All</Radio>
@@ -58,8 +62,6 @@ Filters.propTypes = {
 };
 
 const FilterForm = styled(Form)`
-  width: 200px;
-
   .ant-form-item {
     margin: 0;
   }
@@ -71,7 +73,7 @@ const FilterForm = styled(Form)`
 `;
 
 const FilterCard = styled(Card)`
-  width: 250px;
+  margin-bottom: 20px !important;
 
   .ant-card-body {
     padding: 10px 20px;
@@ -96,13 +98,19 @@ const Others = styled(FormItem)`
 
 const mapStateToProps = state => ({
   fields: state.filters.fields,
+  query: state.search.input.value,
 });
 
 const mapDispatchToProps = dispatch => ({
   onChange: fields => dispatch(updateForm(fields)),
+  fetchRepos: (query, filters) => dispatch(fetchRepos(query, filters)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create({
+  onValuesChange(props, changedValues, allValues) {
+    const filters = _.mapValues(allValues, value => ({ value }));
+    props.fetchRepos(props.query, filters);
+  },
   onFieldsChange(props, changedFields) {
     props.onChange(changedFields);
   },
