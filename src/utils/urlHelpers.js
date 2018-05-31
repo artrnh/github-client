@@ -48,9 +48,9 @@ const normalizeFilters = (filters) => {
   return normalized;
 };
 
-export default (query, filters) => {
+export default (query, filters, page = 1) => {
   const q = query ? `${query}+` : '';
   const searchParams = Object.entries(normalizeFilters(filters)).map(([key, value]) => `${key}:${value}`).join('+');
 
-  return `https://api.github.com/search/repositories?q=${q}${searchParams}`;
+  return `https://api.github.com/search/repositories?q=${q}${searchParams}&page=${page}`;
 };

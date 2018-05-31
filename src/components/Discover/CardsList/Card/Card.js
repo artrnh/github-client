@@ -15,17 +15,19 @@ const Card = props => (
     >
       {props.descr}
       <HorisontalDivider />
-      <Info>
-        <Language language={props.language}>{props.language}</Language>
-      </Info>
-      <Info>
-        <Icon type="star" style={{ marginRight: 5 }} />
-        {props.stars}
-      </Info>
-      <Info>
-        <Icon type="fork" style={{ marginRight: 5 }} />
-        {props.forks}
-      </Info>
+      <Stats>
+        <Info>
+          <Language language={props.language}>{props.language}</Language>
+        </Info>
+        <Info>
+          <Icon type="star" style={{ marginRight: 5 }} />
+          {props.stars}
+        </Info>
+        <Info>
+          <Icon type="fork" style={{ marginRight: 5 }} />
+          {props.forks}
+        </Info>
+      </Stats>
     </AntdCard>
   </RepoCard>
 );
@@ -59,6 +61,12 @@ const RepoCard = styled(Link)`
   ${media.lg`width: 48%;`}
   ${media.md`width: 95%;`}
   ${media.sm`width: 100%;`}
+`;
+
+const Stats = styled.div`
+  display: flex;
+  justify-content: space-between;
+  white-space: nowrap;
 `;
 
 const Info = styled.span`

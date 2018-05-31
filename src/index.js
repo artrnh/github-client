@@ -4,14 +4,21 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import registerServiceWorker from './utils/registerServiceWorker';
+import { injectGlobal } from 'styled-components';
 
+import registerServiceWorker from './utils/registerServiceWorker';
 import App from './App';
 
 import search from './store/reducers/search';
 import filters from './store/reducers/filters';
 import repositories from './store/reducers/repositories';
 import watchSearch from './store/sagas';
+
+injectGlobal`
+  body {
+    height: auto;
+  }
+`;
 
 const reducer = combineReducers({
   search,

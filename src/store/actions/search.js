@@ -15,7 +15,22 @@ export const saveRepos = repositories => ({
   payload: { repositories },
 });
 
-export const searchFail = error => ({
+export const fetchReposFail = error => ({
   type: actionsTypes.FETCH_REPOS_FAIL,
+  error,
+});
+
+export const fetchMoreRepos = (query, filters, page) => ({
+  type: actionsTypes.FETCH_MORE_REPOS_INIT,
+  payload: { query, filters, page },
+});
+
+export const saveMoreRepos = repositories => ({
+  type: actionsTypes.FETCH_MORE_REPOS_SUCCESS,
+  payload: { repositories },
+});
+
+export const fetchMoreReposFail = error => ({
+  type: actionsTypes.FETCH_MORE_REPOS_FAIL,
   error,
 });

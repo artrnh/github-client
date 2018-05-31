@@ -2,9 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Spin } from 'antd';
+import _ from 'lodash';
 
 import Card from './Card/Card';
+import { fetchMoreRepos } from '../../../store/actions/search';
+import withInfiniteScroll from '../../../hoc/withInfiniteScroll';
+import Spinner from '../../UI/Spinner';
 
 const CardsList = (props) => {
   if (props.loading) return <Spinner size="large" />;
@@ -39,13 +42,18 @@ const Cards = styled.div`
   flex-wrap: wrap;
 `;
 
-const Spinner = styled(Spin)`
-  margin: 50px 0 0 50% !important;
-`;
-
 const mapStateToProps = state => ({
   repos: state.repositories.repos,
   loading: state.repositories.loading,
+  loadingMore: state.repositories.loadingMore,
+  page: state.repositories.page,
+  query: state.search.input.value,
+  filters: state.filters.fields,
 });
 
-export default connect(mapStateToProps)(CardsList);
+const mapDispatchToProps = dispatch => ({
+  paginatedSearch: _.throttle((query, filters, page) =>
+    dispatch(fetchMoreRepos(query, filters, page))),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withInfiniteScroll(CardsList));

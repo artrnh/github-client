@@ -103,7 +103,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onChange: fields => dispatch(updateForm(fields)),
-  fetchRepos: (query, filters) => dispatch(fetchRepos(query, filters)),
+  fetchRepos: _.debounce((query, filters) => dispatch(fetchRepos(query, filters)), 750),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create({

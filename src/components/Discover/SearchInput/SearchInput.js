@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Input, Form } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { updateForm, fetchRepos } from '../../../store/actions/search';
 
@@ -16,30 +17,14 @@ class SearchInput extends Component {
       value: PropTypes.string,
     }).isRequired,
     filters: PropTypes.shape({
-      date: PropTypes.shape({
-        value: PropTypes.object,
-      }),
-      forks: PropTypes.shape({
-        value: PropTypes.number,
-      }),
-      hasOpenedIssues: PropTypes.shape({
-        value: PropTypes.bool,
-      }),
-      hasTopics: PropTypes.shape({
-        value: PropTypes.bool,
-      }),
-      language: PropTypes.shape({
-        value: PropTypes.string,
-      }),
-      owner: PropTypes.shape({
-        value: PropTypes.string,
-      }),
-      stars: PropTypes.shape({
-        value: PropTypes.number,
-      }),
-      type: PropTypes.shape({
-        value: PropTypes.string,
-      }),
+      date: PropTypes.object,
+      forks: PropTypes.object,
+      hasOpenedIssues: PropTypes.object,
+      hasTopics: PropTypes.object,
+      language: PropTypes.object,
+      owner: PropTypes.object,
+      stars: PropTypes.object,
+      type: PropTypes.object,
     }).isRequired,
     fetchRepos: PropTypes.func.isRequired,
   }
@@ -67,7 +52,6 @@ class SearchInput extends Component {
           {getFieldDecorator('search')(<Search
             placeholder="Search..."
             size="large"
-            enterButton
           />)}
         </FormItem>
       </Form>
@@ -82,10 +66,13 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onChange: changedFields => dispatch(updateForm(changedFields.search)),
-  fetchRepos: (query, filters) => dispatch(fetchRepos(query, filters)),
+  fetchRepos: _.debounce((query, filters) => dispatch(fetchRepos(query, filters)), 750),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form.create({
+  onValuesChange(props, { search }) {
+    props.fetchRepos(search, props.filters);
+  },
   onFieldsChange(props, changedFields) {
     props.onChange(changedFields);
   },
