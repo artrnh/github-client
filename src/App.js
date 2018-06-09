@@ -2,8 +2,8 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Layout from './hoc/Layout';
-import Discover from './components/Discover/Discover';
-import Profile from './components/Profile/Profile';
+import Discover from './components/Discover';
+import Profile from './components/Profile';
 
 const App = () => (
   <Layout>

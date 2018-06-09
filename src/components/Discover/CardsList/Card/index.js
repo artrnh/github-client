@@ -11,7 +11,7 @@ const Card = props => (
   <RepoCard to="/discover">
     <AntdCard
       title={props.name}
-      extra={props.fork ? <Icon type="fork" /> : null}
+      extra={props.fork && <Icon type="fork" />}
     >
       {props.descr}
       <HorisontalDivider />

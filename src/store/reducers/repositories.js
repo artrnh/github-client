@@ -1,7 +1,7 @@
 import * as actionsTypes from '../actions/actionsTypes';
 
 const initialState = {
-  repos: {},
+  repos: [],
   page: 1,
   loading: true,
   loadingMore: false,
@@ -42,7 +42,7 @@ const reducer = (state = initialState, action) => {
     case actionsTypes.FETCH_MORE_REPOS_INIT:
       return {
         ...state,
-        page: state.page + 1,
+        page: payload.page,
         loadingMore: true,
       };
 

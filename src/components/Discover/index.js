@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 
-import SearchInput from './SearchInput/SearchInput';
-import Filters from './Filters/Filters';
-import CardsList from './CardsList/CardsList';
+import SearchInput from './SearchInput';
+import Filters from './Filters';
+import CardsList from './CardsList';
 
 const Discover = () => (
   <div>

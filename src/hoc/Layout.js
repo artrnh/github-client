@@ -3,46 +3,35 @@ import { Menu, Icon } from 'antd';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
+import { compose, withHandlers, mapProps } from 'recompose';
 
 import media from '../utils/media';
 
-const Layout = (props) => {
-  const onItemSelect = ({ key }) => {
-    props.history.push(`/${key}`);
-  };
-
-  const activeTab = props.location.pathname.slice(1);
-
-  return (
-    <Container>
-      <MenuBar
-        mode="horizontal"
-        openKeys={[activeTab]}
-        selectedKeys={[activeTab]}
-        onSelect={onItemSelect}
-      >
-        <Menu.Item key="profile">
-          <Icon type="user" />
-          Profile
-        </Menu.Item>
-        <Menu.Item key="discover">
-          <Icon type="compass" />
-          Discover
-        </Menu.Item>
-      </MenuBar>
-      {props.children}
-    </Container>
-  );
-};
+const Layout = props => (
+  <Container>
+    <MenuBar
+      mode="horizontal"
+      openKeys={[props.activeTab]}
+      selectedKeys={[props.activeTab]}
+      onSelect={props.handleItemSelect}
+    >
+      <Menu.Item key="profile">
+        <Icon type="user" />
+        Profile
+      </Menu.Item>
+      <Menu.Item key="discover">
+        <Icon type="compass" />
+        Discover
+      </Menu.Item>
+    </MenuBar>
+    {props.children}
+  </Container>
+);
 
 Layout.propTypes = {
   children: PropTypes.element.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }).isRequired,
+  handleItemSelect: PropTypes.func.isRequired,
+  activeTab: PropTypes.string.isRequired,
 };
 
 const Container = styled.div`
@@ -56,4 +45,17 @@ const MenuBar = styled(Menu)`
   margin-bottom: 15px;
 `;
 
-export default withRouter(Layout);
+export default compose(
+  withRouter,
+
+  mapProps(props => ({
+    activeTab: props.location.pathname.slice(1),
+    ...props,
+  })),
+
+  withHandlers({
+    handleItemSelect: props => (e) => {
+      props.history.push(`/${e.key}`);
+    },
+  }),
+)(Layout);

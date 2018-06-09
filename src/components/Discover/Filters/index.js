@@ -4,18 +4,21 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { compose } from 'recompose';
 
-import { updateForm } from '../../../store/actions/filters';
-import { fetchRepos } from '../../../store/actions/search';
+import { updateFiltersForm, fetchRepos } from '../../../store/actions';
+import languages from './languages.json';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const RadioGroup = Radio.Group;
 const Filters = (props) => {
   const { getFieldDecorator } = props.form;
-  const options = (
-    <Option value="JavaScript">JavaScript</Option>
-  );
+  const options = Object.entries(languages).map(([key, value]) => (
+    <Option key={key} value={value}>
+      {key}
+    </Option>
+  ));
   const radioBtns = (
     <Fragment>
       <Radio value="true">All</Radio>
@@ -102,52 +105,55 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onChange: fields => dispatch(updateForm(fields)),
+  onChange: fields => dispatch(updateFiltersForm(fields)),
   fetchRepos: _.debounce((query, filters) => dispatch(fetchRepos(query, filters)), 750),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form.create({
-  onValuesChange(props, changedValues, allValues) {
-    const filters = _.mapValues(allValues, value => ({ value }));
-    props.fetchRepos(props.query, filters);
-  },
-  onFieldsChange(props, changedFields) {
-    props.onChange(changedFields);
-  },
-  mapPropsToFields(props) {
-    return {
-      language: Form.createFormField({
-        ...props.fields.language,
-        value: props.fields.language.value,
-      }),
-      owner: Form.createFormField({
-        ...props.fields.owner,
-        value: props.fields.owner.value,
-      }),
-      stars: Form.createFormField({
-        ...props.fields.stars,
-        value: props.fields.stars.value,
-      }),
-      forks: Form.createFormField({
-        ...props.fields.forks,
-        value: props.fields.forks.value,
-      }),
-      date: Form.createFormField({
-        ...props.fields.date,
-        value: props.fields.date.value,
-      }),
-      type: Form.createFormField({
-        ...props.fields.type,
-        value: props.fields.type.value,
-      }),
-      hasOpenedIssues: Form.createFormField({
-        ...props.fields.hasOpenedIssues,
-        value: props.fields.hasOpenedIssues.value,
-      }),
-      hasTopics: Form.createFormField({
-        ...props.fields.hasTopics,
-        value: props.fields.hasTopics.value,
-      }),
-    };
-  },
-})(Filters));
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  Form.create({
+    onValuesChange(props, changedValues, allValues) {
+      const filters = _.mapValues(allValues, value => ({ value }));
+      props.fetchRepos(props.query, filters);
+    },
+    onFieldsChange(props, changedFields) {
+      props.onChange(changedFields);
+    },
+    mapPropsToFields(props) {
+      return {
+        language: Form.createFormField({
+          ...props.fields.language,
+          value: props.fields.language.value,
+        }),
+        owner: Form.createFormField({
+          ...props.fields.owner,
+          value: props.fields.owner.value,
+        }),
+        stars: Form.createFormField({
+          ...props.fields.stars,
+          value: props.fields.stars.value,
+        }),
+        forks: Form.createFormField({
+          ...props.fields.forks,
+          value: props.fields.forks.value,
+        }),
+        date: Form.createFormField({
+          ...props.fields.date,
+          value: props.fields.date.value,
+        }),
+        type: Form.createFormField({
+          ...props.fields.type,
+          value: props.fields.type.value,
+        }),
+        hasOpenedIssues: Form.createFormField({
+          ...props.fields.hasOpenedIssues,
+          value: props.fields.hasOpenedIssues.value,
+        }),
+        hasTopics: Form.createFormField({
+          ...props.fields.hasTopics,
+          value: props.fields.hasTopics.value,
+        }),
+      };
+    },
+  }),
+)(Filters);
