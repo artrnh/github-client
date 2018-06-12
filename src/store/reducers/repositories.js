@@ -5,7 +5,7 @@ const initialState = {
   page: 1,
   loading: true,
   loadingMore: false,
-  error: false,
+  error: null,
 };
 
 const reducer = (state = initialState, action) => {

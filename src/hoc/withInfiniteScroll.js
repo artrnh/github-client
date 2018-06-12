@@ -28,6 +28,6 @@ const enhance = compose(
 export default () => Component => enhance(props => (
   <div>
     <Component {...props} />
-    {props.loadingMore && <Spinner />}
+    {props.loadingMore && !props.loading && <Spinner />}
   </div>
 ));

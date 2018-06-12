@@ -24,7 +24,7 @@ const normalizeFilters = (filters) => {
 
       case 'date':
         if (!value) break;
-        acc.pushed = value || '';
+        acc.pushed = value.format('YYYY-MM-DD') || '';
         break;
 
       case 'type':
@@ -49,8 +49,7 @@ const normalizeFilters = (filters) => {
 };
 
 export default (query, filters, page = 1) => {
-  const q = query ? `${query}+` : '';
   const searchParams = Object.entries(normalizeFilters(filters)).map(([key, value]) => `${key}:${value}`).join('+');
-
-  return `https://api.github.com/search/repositories?q=${q}${searchParams}&page=${page}`;
+  const q = `${query && `${query}+`}${searchParams}`;
+  return { q, page };
 };

@@ -14,7 +14,7 @@ const Card = props => (
       extra={props.fork && <Icon type="fork" />}
     >
       {props.descr}
-      <HorisontalDivider />
+      {props.descr && <Divider />}
       <Stats>
         <Info>
           <Language language={props.language}>{props.language}</Language>
@@ -71,10 +71,6 @@ const Stats = styled.div`
 
 const Info = styled.span`
   margin-right: 8px;
-`;
-
-const HorisontalDivider = styled(Divider)`
-  margin: 16px 0 !important;
 `;
 
 const Language = styled.span`
