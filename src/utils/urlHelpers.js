@@ -1,8 +1,8 @@
-import _ from 'lodash';
+import { mapValues, transform } from 'lodash';
 
 const normalizeFilters = (filters) => {
-  const filterValues = _.mapValues(filters, obj => obj.value);
-  const normalized = _.transform(filterValues, (acc, value, key) => {
+  const filterValues = mapValues(filters, obj => obj.value);
+  const normalized = transform(filterValues, (acc, value, key) => {
     switch (key) {
       case 'language':
         acc.language = value;
@@ -49,7 +49,10 @@ const normalizeFilters = (filters) => {
 };
 
 export default (query, filters, page = 1) => {
-  const searchParams = Object.entries(normalizeFilters(filters)).map(([key, value]) => `${key}:${value}`).join('+');
+  const searchParams = Object.entries(normalizeFilters(filters))
+    .map(([key, value]) => `${key}:${value}`)
+    .join('+');
+
   const q = `${query && `${query}+`}${searchParams}`;
   return { q, page };
 };

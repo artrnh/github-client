@@ -49,8 +49,8 @@ export default compose(
   withRouter,
 
   mapProps(props => ({
-    activeTab: props.location.pathname.slice(1),
     ...props,
+    activeTab: props.location.pathname.slice(1),
   })),
 
   withHandlers({

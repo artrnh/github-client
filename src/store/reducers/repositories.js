@@ -3,6 +3,7 @@ import * as actionsTypes from '../actions/actionsTypes';
 const initialState = {
   repos: [],
   page: 1,
+  incompleteResults: true,
   loading: true,
   loadingMore: false,
   error: null,
@@ -22,6 +23,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         repos: payload.repositories.items,
+        incompleteResults: payload.repositories.incomplete_results,
         loading: false,
       };
 
@@ -54,6 +56,7 @@ const reducer = (state = initialState, action) => {
           ...payload.repositories.items.filter(repo =>
             !state.repos.find(savedRepo => repo.id === savedRepo.id)),
         ],
+        incompleteResults: payload.repositories.incomplete_results,
         loadingMore: false,
       };
 

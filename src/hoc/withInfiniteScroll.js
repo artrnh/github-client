@@ -10,7 +10,8 @@ const enhance = compose(
         (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 500) &&
         props.repos.length &&
         !props.loading &&
-        !props.loadingMore
+        !props.loadingMore &&
+        props.incompleteResults
       ) props.fetchMoreRepos(props.query, props.filters, props.page + 1);
     },
   }),

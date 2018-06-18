@@ -1,30 +1,34 @@
 import React from 'react';
 import { Row, Col } from 'antd';
+import styled from 'styled-components';
 
 import SearchInput from './SearchInput';
 import Filters from './Filters';
 import CardsList from './CardsList';
+import media from '../../utils/media';
 
 const Discover = () => (
-  <div>
+  <Container>
     <SearchInput />
     <Row>
       <Col
-        sm={{ span: 9 }}
         md={{ span: 7 }}
         lg={{ span: 5 }}
       >
         <Filters />
       </Col>
       <Col
-        sm={{ span: 14, offset: 1 }}
         md={{ span: 16, offset: 1 }}
         lg={{ span: 18, offset: 1 }}
       >
         <CardsList />
       </Col>
     </Row>
-  </div>
+  </Container>
 );
+
+const Container = styled.div`
+  ${media.md`padding: 0 10px;`}
+`;
 
 export default Discover;

@@ -1,10 +1,21 @@
 import React, { Fragment } from 'react';
-import { Card, Form, Input, Radio, Select, DatePicker, Checkbox, InputNumber } from 'antd';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { debounce, mapValues } from 'lodash';
 import { compose } from 'recompose';
+import {
+  Card,
+  Form,
+  Input,
+  Radio,
+  Select,
+  DatePicker,
+  Checkbox,
+  InputNumber,
+  notification,
+  Icon,
+} from 'antd';
 
 import { updateFiltersForm, fetchRepos } from '../../../store/actions';
 import languages from './languages.json';
@@ -42,7 +53,7 @@ const Filters = (props) => {
           {getFieldDecorator('forks')(<InputNumber min={0} />)}
         </FormItem>
         <FormItem label="Updated after">
-          {getFieldDecorator('date')(<DatePicker />)}
+          {getFieldDecorator('date')(<DatePicker format="DD/MM/YYYY" />)}
         </FormItem>
         <RadioButtonsContainer label="Type">
           {getFieldDecorator('type')(<RadioButtons>{radioBtns}</RadioButtons>)}
@@ -106,14 +117,25 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onChange: fields => dispatch(updateFiltersForm(fields)),
-  fetchRepos: _.debounce((query, filters) => dispatch(fetchRepos(query, filters)), 750),
+  fetchRepos: debounce((query, filters) => dispatch(fetchRepos(query, filters)), 750),
 });
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   Form.create({
     onValuesChange(props, changedValues, allValues) {
-      const filters = _.mapValues(allValues, value => ({ value }));
+      if (changedValues.language && changedValues.language === 'All') {
+        notification.open({
+          message: 'Note',
+          description: `GitHub Search API doesn't work properly with
+            "All" languages option selected, please try to write a
+            search query or choose specific language.`,
+          icon: <Icon type="warning" />,
+          duration: 10,
+        });
+      }
+
+      const filters = mapValues(allValues, value => ({ value }));
       props.fetchRepos(props.query, filters);
     },
     onFieldsChange(props, changedFields) {

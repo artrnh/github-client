@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, Form } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import { debounce } from 'lodash';
 import { compose, lifecycle, withHandlers } from 'recompose';
 
 import { updateSearchForm, fetchRepos } from '../../../store/actions';
@@ -14,7 +14,7 @@ const SearchInput = (props) => {
 
   return (
     <Form onSubmit={props.handleSubmit}>
-      <FormItem label="Search by repository">
+      <FormItem label="Search by repository name and description">
         {getFieldDecorator('search')(<Search
           placeholder="Search..."
           size="large"
@@ -39,7 +39,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onChange: changedFields => dispatch(updateSearchForm(changedFields.search)),
   fetchReposImmediate: (query, filters) => dispatch(fetchRepos(query, filters)),
-  fetchReposDebounced: _.debounce((query, filters) => dispatch(fetchRepos(query, filters)), 750),
+  fetchReposDebounced: debounce((query, filters) => dispatch(fetchRepos(query, filters)), 750),
 });
 
 export default compose(

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
+import { throttle } from 'lodash';
 import { compose, branch, renderComponent } from 'recompose';
 
 import Card from './Card';
@@ -37,7 +37,10 @@ const CardsList = (props) => {
 };
 
 CardsList.propTypes = {
-  repos: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]).isRequired,
+  repos: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.arrayOf(PropTypes.object),
+  ]).isRequired,
 };
 
 const Cards = styled.div`
@@ -60,10 +63,11 @@ const mapStateToProps = state => ({
   page: state.repositories.page,
   query: state.search.input.value,
   filters: state.filters.fields,
+  incompleteResults: state.repositories.incompleteResults,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchMoreRepos: _.throttle((query, filters, page) =>
+  fetchMoreRepos: throttle((query, filters, page) =>
     dispatch(fetchMoreRepos(query, filters, page))),
 });
 

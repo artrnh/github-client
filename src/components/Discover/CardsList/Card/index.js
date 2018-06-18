@@ -3,9 +3,11 @@ import { Card as AntdCard, Icon, Divider } from 'antd';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { mapProps } from 'recompose';
 
 import media from '../../../../utils/media';
 import langColors from './langColors.json';
+import { roundStr, roundNum } from '../../../../utils/rounders';
 
 const Card = props => (
   <RepoCard to="/discover">
@@ -13,19 +15,19 @@ const Card = props => (
       title={props.name}
       extra={props.fork && <Icon type="fork" />}
     >
-      {props.descr}
-      {props.descr && <Divider />}
+      {roundStr(props.descr)}
+      <Divider />
       <Stats>
         <Info>
           <Language language={props.language}>{props.language}</Language>
         </Info>
         <Info>
           <Icon type="star" style={{ marginRight: 5 }} />
-          {props.stars}
+          {roundNum(props.stars)}
         </Info>
         <Info>
           <Icon type="fork" style={{ marginRight: 5 }} />
-          {props.forks}
+          {roundNum(props.forks)}
         </Info>
       </Stats>
     </AntdCard>
@@ -37,18 +39,19 @@ Card.propTypes = {
   name: PropTypes.string.isRequired,
   descr: PropTypes.string,
   fork: PropTypes.bool,
-  language: PropTypes.string.isRequired,
+  language: PropTypes.string,
   stars: PropTypes.number.isRequired,
   forks: PropTypes.number.isRequired,
 };
 
 Card.defaultProps = {
-  descr: 'Sorry, there\'s no description provided',
+  descr: '',
   fork: false,
+  language: 'Other',
 };
 
 const RepoCard = styled(Link)`
-  width: 30%;
+  width: 32%;
   margin-bottom: 20px !important;
   transition: transform .2s;
   text-decoration: none !important;
@@ -59,8 +62,18 @@ const RepoCard = styled(Link)`
   }
 
   ${media.lg`width: 48%;`}
-  ${media.md`width: 95%;`}
-  ${media.sm`width: 100%;`}
+  ${media.md`width: 100%;`}
+
+  .ant-card {
+    height: 100%;
+  }
+
+  .ant-card-body {
+    height: calc(100% - 56px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 `;
 
 const Stats = styled.div`
@@ -91,4 +104,9 @@ const Language = styled.span`
   }
 `;
 
-export default Card;
+export default mapProps(props => ({
+  ...props,
+  descr: props.descr || 'There is no description',
+  fork: props.fork || false,
+  language: props.language || 'Other',
+}))(Card);
